@@ -31,13 +31,17 @@ const StoreProvider: React.FC<TStoreProvider> = ({ children, mockStore }) => {
         }
     }, [store, mockStore]);
 
-    if (!store && mockStore) return null;
+    if (!store) return null;
 
     return <StoreContext.Provider value={store}>{children}</StoreContext.Provider>;
 };
 
 const useStore = () => {
     const store = useContext(StoreContext);
+
+    if (!store) {
+        throw new Error('useStore must be used within a StoreProvider');
+    }
 
     return store as RootStore;
 };

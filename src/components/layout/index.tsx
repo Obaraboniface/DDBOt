@@ -204,19 +204,19 @@ const Layout = observer(() => {
         isOnline, // Add isOnline to dependencies
     ]);
 
-    // Add offline timeout to prevent infinite authentication
+    // Add safety timeout to prevent infinite authentication state
     useEffect(() => {
-        if (!isOnline && isAuthenticating) {
-            console.log('[Layout] Setting offline timeout for authentication');
+        if (isAuthenticating) {
+            console.log('[Layout] Setting safety timeout for authentication');
             const timeout = setTimeout(() => {
-                console.log('[Layout] Offline timeout reached, stopping authentication');
+                console.log('[Layout] Safety timeout reached, stopping authentication state');
                 setIsAuthenticating(false);
                 setClientHasCurrency(true);
-            }, 2000);
+            }, 5000); // 5 second safety timeout
 
             return () => clearTimeout(timeout);
         }
-    }, [isOnline, isAuthenticating]);
+    }, [isAuthenticating]);
 
     // Add a state to track if initial authentication check is complete
     const [isInitialAuthCheckComplete, setIsInitialAuthCheckComplete] = useState(false);
